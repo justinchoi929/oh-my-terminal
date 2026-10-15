@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# Backup files produced by install.sh
+*.bak
+
+# Editor / OS temp
+*~
+.*.swp
+*.swp
