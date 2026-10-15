@@ -15,7 +15,7 @@ All configs for Ghostty, Zsh, and Starship live in one repo and are deployed as 
 | Modern CLI | `eza` / `bat` / `fd` / `rg` | replace `ls` / `cat` / `find` / `grep` |
 | Font | **MesloLGS NF** | bundled in `fonts/` for offline install |
 
-The bundled `.zshrc` also carries my personal env (JDK multi-version, Tomcat, Go, Maven, pnpm, Rust/cargo), `set-ssh-key`, and common aliases.
+The bundled `.zshrc` also carries my personal env (JDK multi-version, Tomcat, Go, Maven, pnpm, Rust/cargo), `set-ssh-key`, and common aliases. Windows users: see `configs/Microsoft.PowerShell_profile.ps1` (PowerShell equivalent) under Platform notes.
 
 ## Quick start
 
@@ -27,7 +27,17 @@ bash install.sh --with-deps     # also install missing Homebrew packages
 bash install.sh --dry-run       # preview only, change nothing
 ```
 
-Restart your terminal (`exec zsh`) or relaunch Ghostty afterwards.
+**Windows / PowerShell:** use `install.ps1` instead — native Windows Ghostty reads `%LOCALAPPDATA%\ghostty\config`, not `~/.config`:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File install.ps1            # deploy + fonts + tool checklist
+powershell -ExecutionPolicy Bypass -File install.ps1 -WithDeps   # also install missing deps via winget
+powershell -ExecutionPolicy Bypass -File install.ps1 -DryRun     # preview only
+```
+
+> ⚠️ On Windows we **copy** (not symlink) to avoid admin / Developer Mode requirements, so local edits don't flow back to the repo.
+
+Restart your terminal (`exec zsh`, or relaunch Ghostty / reopen PowerShell) afterwards.
 
 ## What the installer does
 
@@ -36,26 +46,41 @@ Restart your terminal (`exec zsh`) or relaunch Ghostty afterwards.
 3. **Installs fonts** into `~/Library/Fonts` (macOS) or `~/.local/share/fonts` (Linux).
 4. **Checks / installs deps** — `--with-deps` uses Homebrew; otherwise prints a ✅/❌ checklist.
 
+> 💡 Windows users: use `install.ps1` — same idea (backup + copy + fonts + optional winget deps) but targets Windows paths and **copies** instead of symlinking.
+
 ## File mapping
 
-| Repo file | macOS target | Linux target |
-|-----------|--------------|--------------|
-| `configs/ghostty.config` | `~/Library/Application Support/com.mitchellh.ghostty/config` | `~/.config/ghostty/config` |
-| `configs/starship.toml` | `~/.config/starship.toml` | `~/.config/starship.toml` |
-| `configs/zshrc` | `~/.zshrc` | `~/.zshrc` |
-| `configs/gitconfig` | `~/.gitconfig` | `~/.gitconfig` |
+| Repo file | macOS | Linux | Windows |
+|-----------|-------|-------|---------|
+| `configs/ghostty.config` | `~/Library/Application Support/com.mitchellh.ghostty/config` | `~/.config/ghostty/config` | `%LOCALAPPDATA%\ghostty\config` |
+| `configs/starship.toml` | `~/.config/starship.toml` | `~/.config/starship.toml` | `~/.config\starship.toml` |
+| `configs/zshrc` | `~/.zshrc` | `~/.zshrc` | — (use the PowerShell profile below) |
+| `configs/Microsoft.PowerShell_profile.ps1` | — | — | `$PROFILE` (`~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`) |
+| `configs/gitconfig` | `~/.gitconfig` | `~/.gitconfig` | `~\.gitconfig` |
 
 
 ## Layout
 
 ```
 oh-my-terminal/
-├── install.sh
-├── configs/   (ghostty.config, starship.toml, zshrc, gitconfig)
+├── install.sh   # deployer for macOS / Linux (backup + symlink + fonts + deps)
+├── install.ps1  # deployer for Windows / PowerShell (backup + copy + fonts + winget)
+├── configs/   (ghostty.config, starship.toml, zshrc, gitconfig, Microsoft.PowerShell_profile.ps1)
 ├── fonts/     (MesloLGS NF)
 ├── README.md
 ├── README_CN.md
 └── .gitignore
 ```
+
+## Platform notes
+
+- **macOS (primary):** Ghostty config lives at `~/Library/Application Support/com.mitchellh.ghostty/config`; the script handles it.
+- **Linux / WSL:** Ghostty isn't in apt; the script places the config at `~/.config/ghostty/config`. Install a terminal (Ghostty / WezTerm / Kitty) yourself.
+- **Windows / PowerShell:**
+  - Deploy with `install.ps1` (don't use `install.sh` — it detects Windows and tells you to switch).
+  - Ghostty config → `%LOCALAPPDATA%\ghostty\config`; Starship config → `~/.config\starship.toml` (= `C:\Users\you\.config\starship.toml`); PowerShell profile → `$PROFILE`.
+  - Shell config is `configs/Microsoft.PowerShell_profile.ps1` (the PowerShell equivalent of `.zshrc`: Starship init, `eza/bat/fd/rg` aliases, `zoxide`, `fnm`, `set-ssh-key`, etc., rewritten in PowerShell).
+  - Fonts install to the per-user fonts dir `%LOCALAPPDATA%\Microsoft\Windows\Fonts` (no admin needed); if a terminal can't see them, also copy the TTFs into `C:\Windows\Fonts`.
+  - The Java / Tomcat / Go / Maven paths in that profile are **commented examples** — point them at your real Windows installs.
 
 See `README_CN.md` for the full Chinese write-up and design rationale.

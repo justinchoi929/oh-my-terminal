@@ -17,7 +17,7 @@
 | 现代替代品 | `eza` / `bat` / `fd` / `rg` | 替代 `ls` / `cat` / `find` / `grep` |
 | 字体 | **MesloLGS NF** | Nerd Font，离线打包在 `fonts/` |
 
-仓库内的 `.zshrc` 还包含了我个人的环境变量（JDK 多版本、Tomcat、Go、Maven、pnpm、Rust/cargo）以及 `set-ssh-key`、常用别名等。
+仓库内的 `.zshrc` 还包含了我个人的环境变量（JDK 多版本、Tomcat、Go、Maven、pnpm、Rust/cargo）以及 `set-ssh-key`、常用别名等。Windows 用户请看 `configs/Microsoft.PowerShell_profile.ps1`（PowerShell 等价版，见下方平台说明）。
 
 ---
 
@@ -37,7 +37,17 @@ bash install.sh --dry-run     # 只预览会做什么，不改动任何文件
 bash install.sh --help        # 查看帮助
 ```
 
-部署完成后，**重启终端**（`exec zsh`）或重新打开 Ghostty 即可生效。
+在 **Windows / PowerShell** 上请改用 `install.ps1`（Windows 原生 Ghostty 读 `%LOCALAPPDATA%\ghostty\config`，不是 `~/.config`）：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File install.ps1            # 部署 + 字体 + 工具清单
+powershell -ExecutionPolicy Bypass -File install.ps1 -WithDeps   # 额外用 winget 装缺失依赖
+powershell -ExecutionPolicy Bypass -File install.ps1 -DryRun     # 只预览
+```
+
+> ⚠️ Windows 下是**复制**而非软链（避免管理员 / 开发者模式限制），所以本地改动不会自动回流仓库。
+
+部署完成后，**重启终端**（`exec zsh`，或重开 Ghostty / 重新打开 PowerShell）即可生效。
 
 ---
 
@@ -48,14 +58,17 @@ bash install.sh --help        # 查看帮助
 3. **字体安装**：把 `fonts/` 里的 MesloLGS NF 复制到 `~/Library/Fonts`（macOS）或 `~/.local/share/fonts`（Linux）。已存在则跳过。
 4. **依赖检查 / 安装**：`--with-deps` 时用 Homebrew 补齐缺失工具；默认只打印一份 ✅/❌ 清单。
 
+> 💡 Windows 用户请用 `install.ps1`：逻辑一致（备份 + 复制 + 字体 + 可选 winget 依赖），但目标路径为 Windows 对应位置，且用**复制**而非软链。
+
 ### 文件映射
 
-| 仓库文件 | 系统目标（macOS） | 系统目标（Linux） |
-|----------|-------------------|-------------------|
-| `configs/ghostty.config` | `~/Library/Application Support/com.mitchellh.ghostty/config` | `~/.config/ghostty/config` |
-| `configs/starship.toml` | `~/.config/starship.toml` | `~/.config/starship.toml` |
-| `configs/zshrc` | `~/.zshrc` | `~/.zshrc` |
-| `configs/gitconfig` | `~/.gitconfig` | `~/.gitconfig` |
+| 仓库文件 | macOS | Linux | Windows |
+|----------|-------|-------|---------|
+| `configs/ghostty.config` | `~/Library/Application Support/com.mitchellh.ghostty/config` | `~/.config/ghostty/config` | `%LOCALAPPDATA%\ghostty\config` |
+| `configs/starship.toml` | `~/.config/starship.toml` | `~/.config/starship.toml` | `~/.config\starship.toml` |
+| `configs/zshrc` | `~/.zshrc` | `~/.zshrc` | —（改用下方 PowerShell profile） |
+| `configs/Microsoft.PowerShell_profile.ps1` | — | — | `$PROFILE`（即 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`） |
+| `configs/gitconfig` | `~/.gitconfig` | `~/.gitconfig` | `~\.gitconfig` |
 
 
 ---
@@ -64,12 +77,14 @@ bash install.sh --help        # 查看帮助
 
 ```
 oh-my-terminal/
-├── install.sh          # 一键部署脚本（带备份 / 软链 / 字体 / 依赖）
+├── install.sh          # 一键部署脚本（macOS / Linux：备份 + 软链 + 字体 + 依赖）
+├── install.ps1         # 一键部署脚本（Windows / PowerShell：备份 + 复制 + 字体 + winget）
 ├── configs/            # 所有配置文件（dotfiles）
 │   ├── ghostty.config
 │   ├── starship.toml
 │   ├── zshrc
-│   └── gitconfig
+│   ├── gitconfig
+│   └── Microsoft.PowerShell_profile.ps1
 ├── fonts/              # MesloLGS NF（离线安装用）
 ├── README.md           # English
 ├── README_CN.md        # 中文（本文件）
@@ -101,3 +116,9 @@ oh-my-terminal/
 
 - **macOS（主力）**：Ghostty 配置默认在 `~/Library/Application Support/com.mitchellh.ghostty/config`，脚本已自动处理。
 - **Linux / WSL**：Ghostty 不在 apt 源中，脚本会把配置放到 `~/.config/ghostty/config`；终端模拟器需自行安装（Ghostty / WezTerm / Kitty 等）。
+- **Windows / PowerShell**：
+  - 用 `install.ps1` 部署（不要用 `install.sh`，它会检测 Windows 并提示你改用 ps1）。
+  - Ghostty 配置落到 `%LOCALAPPDATA%\ghostty\config`；Starship 配置落到 `~/.config\starship.toml`（Windows 上即 `C:\Users\你\.config\starship.toml`）；PowerShell profile 落到 `$PROFILE`。
+  - Shell 配置是 `configs/Microsoft.PowerShell_profile.ps1`（`.zshrc` 的 PowerShell 等价版：Starship 初始化、`eza/bat/fd/rg` 别名、`zoxide`、`fnm`、`set-ssh-key` 等，用 PowerShell 语法重写）。
+  - 字体装到用户字体目录 `%LOCALAPPDATA%\Microsoft\Windows\Fonts`（无需管理员）；若终端识别不到，可再把 TTF 复制到 `C:\Windows\Fonts`。
+  - 该 profile 里 Java / Tomcat / Go / Maven 的路径是**注释示例**，请改成你 Windows 上的真实安装路径。

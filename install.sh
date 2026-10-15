@@ -39,6 +39,17 @@ for arg in "$@"; do
   esac
 done
 
+# ─── Windows / Git-Bash guard ───────────────────────────────────────
+# The bash installer targets macOS/Linux paths; on Windows you want the
+# PowerShell installer instead (Ghostty reads %LOCALAPPDATA%\ghostty\config).
+case "$(uname -s 2>/dev/null)" in
+  MINGW*|MSYS*|CYGWIN*|*_NT-*)
+    err "Windows detected — the bash installer targets macOS/Linux paths."
+    err "Please run the PowerShell installer instead:"
+    err "  powershell -ExecutionPolicy Bypass -File install.ps1"
+    exit 1 ;;
+esac
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 CFG="$SCRIPT_DIR/configs"
 FONTS="$SCRIPT_DIR/fonts"
