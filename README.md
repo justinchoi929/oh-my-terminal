@@ -1,6 +1,6 @@
 # oh-my-terminal
 
-My personal modern terminal setup, inspired by [lewislulu/terminal-setup](https://github.com/lewislulu/terminal-setup).
+My personal modern terminal setup.
 All configs for Ghostty, Zsh, and Starship live in one repo and are deployed as **symlinks** (the repo is the single source of truth) — re-install on a new machine with one command.
 
 ## Stack

@@ -1,6 +1,6 @@
 # oh-my-terminal
 
-一套属于我自己的现代化终端配置，灵感来自 [lewislulu/terminal-setup](https://github.com/lewislulu/terminal-setup)。
+一套属于我自己的现代化终端配置。
 把 Ghostty、Zsh、Starship 以及各种 CLI 工具的配置集中在一个仓库里，**以仓库为唯一可信源**（dotfiles 风格），换机 / 重装时一条命令即可恢复。
 
 ---
