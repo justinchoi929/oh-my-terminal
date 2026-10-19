@@ -9,5 +9,5 @@
 .*.swp
 *.swp
 
-# WorkBuddy internal project data (agent working memory — not part of the config)
+# Local agent scratch / working memory — not part of the config
 .workbuddy/

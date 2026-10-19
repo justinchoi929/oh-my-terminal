@@ -144,7 +144,7 @@ case ":$PATH:" in
 esac
 
 # ─── Rust / cargo ────────────────────────────────────────────────────
-# Installed via rustup; needed to build the a native Rust worker addon.
+# Installed via rustup; needed to build a native Rust worker addon.
 if [ -f "$HOME/.cargo/env" ]; then
     . "$HOME/.cargo/env"
 fi
