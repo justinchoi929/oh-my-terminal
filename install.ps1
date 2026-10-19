@@ -72,7 +72,6 @@ Write-Host ""
 Deploy-File (Join-Path $Cfg 'ghostty.config')                 $GhosttyDst  'Ghostty config'
 Deploy-File (Join-Path $Cfg 'starship.toml')                  $StarshipDst 'Starship config'
 Deploy-File (Join-Path $Cfg 'Microsoft.PowerShell_profile.ps1') $ProfileDst 'PowerShell profile'
-Deploy-File (Join-Path $Cfg 'gitconfig') (Join-Path $env:USERPROFILE '.gitconfig') 'Git config'
 
 # ─── fonts ───────────────────────────────────────────────────────────
 Write-Host ""

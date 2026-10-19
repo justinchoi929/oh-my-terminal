@@ -68,8 +68,8 @@ powershell -ExecutionPolicy Bypass -File install.ps1 -DryRun     # 只预览
 | `configs/starship.toml` | `~/.config/starship.toml` | `~/.config/starship.toml` | `~/.config\starship.toml` |
 | `configs/zshrc` | `~/.zshrc` | `~/.zshrc` | —（改用下方 PowerShell profile） |
 | `configs/Microsoft.PowerShell_profile.ps1` | — | — | `$PROFILE`（即 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`） |
-| `configs/gitconfig` | `~/.gitconfig` | `~/.gitconfig` | `~\.gitconfig` |
 
+> ⚠️ 本仓库**故意不管理 git 配置**：`~/.gitconfig` 里是本机专属的身份信息（有时还有代理、凭据 helper），放进公开仓库等于泄露隐私。请自行 `git config --global user.name … user.email …`。
 
 ---
 
@@ -83,7 +83,6 @@ oh-my-terminal/
 │   ├── ghostty.config
 │   ├── starship.toml
 │   ├── zshrc
-│   ├── gitconfig
 │   └── Microsoft.PowerShell_profile.ps1
 ├── fonts/              # MesloLGS NF（离线安装用）
 ├── README.md           # English

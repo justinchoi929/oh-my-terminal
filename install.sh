@@ -115,7 +115,6 @@ echo
 link_file "$CFG/ghostty.config" "$GHOSTTY_DST" "Ghostty config"
 link_file "$CFG/starship.toml"  "$HOME/.config/starship.toml" "Starship config"
 link_file "$CFG/zshrc"          "$HOME/.zshrc" "Zsh config"
-link_file "$CFG/gitconfig"      "$HOME/.gitconfig" "Git config"
 
 # ─── fonts ───────────────────────────────────────────────────────────
 echo

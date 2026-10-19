@@ -56,8 +56,8 @@ Restart your terminal (`exec zsh`, or relaunch Ghostty / reopen PowerShell) afte
 | `configs/starship.toml` | `~/.config/starship.toml` | `~/.config/starship.toml` | `~/.config\starship.toml` |
 | `configs/zshrc` | `~/.zshrc` | `~/.zshrc` | — (use the PowerShell profile below) |
 | `configs/Microsoft.PowerShell_profile.ps1` | — | — | `$PROFILE` (`~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`) |
-| `configs/gitconfig` | `~/.gitconfig` | `~/.gitconfig` | `~\.gitconfig` |
 
+> Git config is **not** managed here on purpose: `~/.gitconfig` holds your machine-local identity (and sometimes proxies/credentials helpers), which has no business living in a public repo. Configure it yourself with `git config --global user.name … user.email …`.
 
 ## Layout
 
@@ -65,7 +65,7 @@ Restart your terminal (`exec zsh`, or relaunch Ghostty / reopen PowerShell) afte
 oh-my-terminal/
 ├── install.sh   # deployer for macOS / Linux (backup + symlink + fonts + deps)
 ├── install.ps1  # deployer for Windows / PowerShell (backup + copy + fonts + winget)
-├── configs/   (ghostty.config, starship.toml, zshrc, gitconfig, Microsoft.PowerShell_profile.ps1)
+├── configs/   (ghostty.config, starship.toml, zshrc, Microsoft.PowerShell_profile.ps1)
 ├── fonts/     (MesloLGS NF)
 ├── README.md
 ├── README_CN.md
